@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "antd": "^4.2.2",
-    "axios": "0.18.0",
+    "axios": "0.19.2",
     "core-js": "3.1.2",
     "history": "^4.9.0",
     "mobx": "4.9.4",
