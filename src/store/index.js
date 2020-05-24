@@ -1,5 +1,5 @@
-import indexStore from './index.store';
+import addStore from './add.store';
 
 export default {
-  indexStore,
+  addStore,
 };
