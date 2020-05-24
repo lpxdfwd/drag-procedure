@@ -1,23 +1,44 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, {Component} from 'react';
+import {PlusOutlined} from '@ant-design/icons';
+import { Button } from 'antd';
+import {Title, Container, Content, PageBottom} from './style';
+import Search from './components/search';
+import List from './components/list';
+import SettingModal from './components/settingModal';
 import history from '../../lib/history.lib';
 
-const IndexPage = () => (
-  <Container>
-    <Content>Welcome Use!</Content>
-    <Content onClick={() => history.push('/count')}>Please Click!</Content>
-  </Container>
-);
+class IndexPage extends Component {
+  constructor() {
+    super();
+    this.state = {
+      visible: false
+    };
+  }
+
+  handleShowSetting = id => {
+    console.log('显示弹窗', id);
+    this.setState({visible: true});
+  }
+
+  handleCloseModal = () => this.setState({visible: false})
+
+  render() {
+    const {visible} = this.state;
+    console.log(visible);
+    return (
+      <Container>
+        <Title>锦书机器人话题运营管理平台</Title>
+        <Content>
+          <Search/>
+          <List onShowSetting={this.handleShowSetting}/>
+        </Content>
+        <PageBottom>
+          <Button size='large' type='primary' icon={<PlusOutlined />}>新增</Button>
+        </PageBottom>
+        <SettingModal visible={visible} onCloseModal={this.handleCloseModal}/>
+      </Container>
+    );
+  }
+}
 
 export default IndexPage;
-
-const Container = styled.div`
-  padding-top: 3rem;
-`;
-
-const Content = styled.div`
-  text-align: center;
-  font-size: .3rem;
-  line-height: .5rem;
-  font-weight: bold;
-`;

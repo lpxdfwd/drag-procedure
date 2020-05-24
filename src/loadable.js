@@ -11,6 +11,6 @@ const dynamic = loader => Loadable({
   loading: Loading
 });
 
-export const CountPage = dynamic(() => import(/* webpackChunkName: 'count-page' */'./pages/count/count.page.jsx'));
-
 export const IndexPage = dynamic(() => import(/* webpackChunkName: 'index-page' */'./pages/index/index.page.jsx'));
+
+export const AddPage = dynamic(() => import(/* webpackChunkName: 'add-page' */'./pages/add/add.page.jsx'));

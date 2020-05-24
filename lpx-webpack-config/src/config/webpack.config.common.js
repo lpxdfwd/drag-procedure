@@ -86,16 +86,29 @@ const baseConfig = {
           {
             test: cssRegex,
             exclude: cssModuleRegex,
-            use: ['happypack/loader?id=css'],
+            use: getStyleLoaders({
+              importLoaders: 1,
+              sourceMap: false,
+            }),
             sideEffects: true,
           },
           {
             test: cssModuleRegex,
-            use: ['happypack/loader?id=cssModule']
+            use: getStyleLoaders({
+              importLoaders: 1,
+              sourceMap: false,
+              modules: true,
+              getLocalIdent: getCSSModuleLocalIdent,
+            })
           },
           {
             test: /\.less$/,
-            use: ['happypack/loader?id=less'],
+            use: getStyleLoaders(
+              {
+                importLoaders: 2,
+              },
+              'less-loader'
+            ),
             sideEffects: true,
           },
           {
@@ -140,31 +153,6 @@ const happypackList = [
         },
       }
     ]
-  }),
-  new HappyPack({
-    id: 'cssModule',
-    loaders: getStyleLoaders({
-      importLoaders: 1,
-      sourceMap: false,
-      modules: true,
-      getLocalIdent: getCSSModuleLocalIdent,
-    })
-  }),
-  new HappyPack({
-    id: 'less',
-    loaders: getStyleLoaders(
-        {
-          importLoaders: 2,
-        },
-        'less-loader'
-    )
-  }),
-  new HappyPack({
-    id: 'css',
-    loaders: getStyleLoaders({
-      importLoaders: 1,
-      sourceMap: false,
-    })
   }),
 ]
 
