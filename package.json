@@ -24,7 +24,9 @@
     "styled-components": "^4.2.0"
   },
   "devDependencies": {
+    "autoprefixer": "^9.8.0",
     "babel-plugin-import": "^1.13.0",
+    "progress-bar-webpack-plugin": "^2.1.0",
     "wuyan-cli": "^1.x.x"
   },
   "repository": {

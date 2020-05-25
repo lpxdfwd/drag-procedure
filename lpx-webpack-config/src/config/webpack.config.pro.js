@@ -17,6 +17,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {happypackList} = require('./webpack.config.common');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const env = getClientEnvironment();
 
@@ -106,6 +107,8 @@ module.exports = {
         to: paths.appBuild + '/distStatic'
       }
     ]),
+    //显示构建进度
+    new ProgressBarPlugin(),
     new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
     new ModuleNotFoundPlugin(paths.appPath),
@@ -113,6 +116,8 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'static/css/[name].[contenthash:8].css',
       chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      //忽略css加载顺序
+      ignoreOrder: true
     }),
     new ManifestPlugin({
       fileName: 'asset-manifest.json',

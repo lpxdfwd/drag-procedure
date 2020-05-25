@@ -9,6 +9,7 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const {happypackList} = require('./webpack.config.common');
 
 const env = getClientEnvironment();
@@ -36,6 +37,8 @@ module.exports = {
       publicPath: env.raw.publicPath
     }),
     ...happypackList,
+    //显示构建进度
+    new ProgressBarPlugin(),
     new ModuleNotFoundPlugin(paths.appPath),
     new webpack.DefinePlugin(env.stringified),
     new webpack.HashedModuleIdsPlugin({hashDigest: 'hex'}),

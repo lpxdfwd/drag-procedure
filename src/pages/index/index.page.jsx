@@ -33,7 +33,7 @@ class IndexPage extends Component {
           <List onShowSetting={this.handleShowSetting}/>
         </Content>
         <PageBottom>
-          <Button size='large' type='primary' icon={<PlusOutlined />}>新增</Button>
+          <Button onClick={() => window.open('/add')} size='large' type='primary' icon={<PlusOutlined />}>新增</Button>
         </PageBottom>
         <SettingModal visible={visible} onCloseModal={this.handleCloseModal}/>
       </Container>

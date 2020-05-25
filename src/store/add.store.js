@@ -7,6 +7,8 @@ class IndexStore {
 
   @observable positionLeft = 0;
 
+  @observable addVisible = false
+
   @action.bound setState(obj) {
     for (let i in obj) {
       if (obj.hasOwnProperty(i)) {

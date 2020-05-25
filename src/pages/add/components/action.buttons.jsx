@@ -19,9 +19,15 @@ const ActionButtons = inject('addStore')(observer(props => {
     props.addStore.onToSmall && props.addStore.onToSmall();
   };
 
+  const handleShowAdd = () => {
+    const {setState, addVisible} = props.addStore;
+    if (addVisible) return;
+    setState && setState({addVisible: true});
+  };
+
   return (
     <Container>
-      <Button>新增节点</Button>
+      <Button onClick={handleShowAdd}>新增节点</Button>
       <Button onClick={handleToBig}>放大</Button>
       <Button onClick={handleToSmall}>缩小</Button>
     </Container>
