@@ -1,0 +1,79 @@
+Arguments: 
+  /usr/local/bin/node /Users/liupeixin/.npm-global/bin/yarn install
+
+PATH: 
+  /Users/liupeixin/.just-installs/bin:/Users/liupeixin/Documents/flutter/bin:/Users/liupeixin/.npm-global/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/liupeixin/.just-installs/bin:/Users/liupeixin/Documents/flutter/bin:/Users/liupeixin/.npm-global/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_241.jdk/Contents/Home/bin:/Library/Frameworks/Mono.framework/Versions/5.4.1/bin:/Users/liupeixin/Library/Android/sdk/tools:/Users/liupeixin/Library/Android/sdk/platform-tools:/Users/liupeixin/Library/android/sdk/platform-tools:/Users/liupeixin/Library/android/sdk/tools:/usr/local/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_241.jdk/Contents/Home/bin:/Library/Frameworks/Mono.framework/Versions/5.4.1/bin:/Users/liupeixin/Library/Android/sdk/tools:/Users/liupeixin/Library/Android/sdk/platform-tools:/Users/liupeixin/Library/android/sdk/platform-tools:/Users/liupeixin/Library/android/sdk/tools
+
+Yarn version: 
+  1.16.0
+
+Node version: 
+  10.16.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: EINVAL: invalid argument, unlink '/code/drag-procedure/node_modules/@istanbuljs/load-nyc-config/node_modules/find-up'
+
+npm manifest: 
+  {
+    "name": "react-webpack-template",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "start": "wu-yan run start",
+      "build": "wu-yan run build",
+      "config": "wu-yan config"
+    },
+    "dependencies": {
+      "antd": "^4.2.2",
+      "axios": "0.19.2",
+      "core-js": "3.6.5",
+      "history": "^4.9.0",
+      "mobx": "4.9.4",
+      "mobx-react": "5.4.4",
+      "prop-types": "^15.7.2",
+      "raf": "^3.4.1",
+      "react": "^16.13.0",
+      "react-dom": "^16.13.0",
+      "react-loadable": "^5.5.0",
+      "react-router-dom": "^5.0.0",
+      "styled-components": "^4.2.0"
+    },
+    "devDependencies": {
+      "autoprefixer": "^9.8.0",
+      "babel-plugin-import": "^1.13.0",
+      "progress-bar-webpack-plugin": "^2.1.0",
+      "wuyan-cli": "^1.x.x"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/lpxdfwd/react-webpack-template.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/lpxdfwd/react-webpack-template/issues"
+    },
+    "homepage": "https://github.com/lpxdfwd/react-webpack-template#readme",
+    "browserslist": {
+      "production": [
+        ">0.2%",
+        "not dead",
+        "not op_mini all"
+      ],
+      "development": [
+        "last 1 chrome version",
+        "last 1 firefox version",
+        "last 1 safari version"
+      ]
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -9,6 +9,8 @@ class IndexStore {
 
   @observable addVisible = false
 
+  @observable.deep drawList = [];
+
   @action.bound setState(obj) {
     for (let i in obj) {
       if (obj.hasOwnProperty(i)) {
@@ -23,6 +25,10 @@ class IndexStore {
 
   @action.bound onToSmall() {
     this.scale -= 0.2;
+  }
+
+  @action addDrawItem = (option) => {
+    this.drawList = [].concat(this.drawList, option);
   }
 }
 

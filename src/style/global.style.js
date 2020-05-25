@@ -44,4 +44,8 @@ export default createGlobalStyle`
   #root .ant-btn-primary {
     border-radius: .08rem;
   }
+  body .ant-drawer-right.ant-drawer-open.no-mask {
+    -webkit-transform: none;
+    transform: none;
+  }
 `;

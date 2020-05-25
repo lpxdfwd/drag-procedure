@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
 import {Drawer, Input, Select} from 'antd';
 import styled from 'styled-components';
-import DrawItem from './draw.item';
+import DrawPreItem from './draw.preitem';
 
 class Content extends Component {
   constructor(props) {
@@ -88,7 +88,7 @@ class Content extends Component {
           <div className='text1'>预览节点</div>
           <div className='text2'>(编辑完成拖入左侧画布)</div>
         </PreviewTitle>
-        <PreviewBox><DrawItem title={title} firstText={firstText} mutualType={mutualType}/></PreviewBox>
+        <PreviewBox><DrawPreItem title={title} firstText={firstText} mutualType={mutualType}/></PreviewBox>
       </PreviewContent>
     );
   };
@@ -130,6 +130,7 @@ class Content extends Component {
           <Text1>asdasdasdasd</Text1>
         </CanvasContent>
         <Drawer
+          id='drawer'
           title="新增节点"
           placement="right"
           closable={false}
@@ -238,6 +239,6 @@ const PreviewBox = styled.div`
   margin: 20px auto 0;
   display: flex;
   align-items: center;
-  border: dashed 2px #eee;
   justify-content: center;
+  border: dashed 2px #eee;
 `;
