@@ -3,28 +3,44 @@ import {inject, observer} from 'mobx-react';
 import {Drawer, Input, Select} from 'antd';
 import styled from 'styled-components';
 import DrawPreItem from './draw.preitem';
+import DrawItem from './draw.item';
+import {throttle} from '../../../utils/normal.utils';
 
 class Content extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      positionTop: 0,
-      positionLeft: 0,
-      left: -8000,
-      top: -8000,
       isDown: false,
       title: '',
       firstText: '',
       repeatText: '',
-      mutualType: '1'
+      mutualType: '1',
+      positionTop: 0,
+      positionLeft: 0
     };
   }
 
   componentDidMount() {
     this.drawContent = document.getElementById('draw-content');
     this.drawContent.onmousedown = this.handleMouseDown;
-    // this.drawContent.onmouseenter = () => console.log(123);
-    document.onkeydown = this.handleKeyDown
+    document.onkeydown = this.handleKeyDown;
+    this.initParentSize();
+    window.onresize = throttle(this.initParentSize, 50);
+    // this.canvas.setAttribute('width', 16000+'px');
+    // this.canvas.setAttribute('height',16000+'px');
+    // const cxt = this.canvas.getContext('2d');
+    // cxt.moveTo(7800,7800);
+    // cxt.lineTo(7900, 7900);
+    // cxt.stroke();
+  }
+
+  initParentSize = () => {
+    this.parentW = this.drawContent?.parentNode?.clientWidth ?? 0;
+    this.parentH = this.drawContent?.parentNode?.clientHeight ?? 0;
+    this.props.addStore.setState({
+      parentW: this.parentW,
+      parentH: this.parentH
+    })
   }
 
   handleKeyDown = e => {
@@ -44,7 +60,7 @@ class Content extends Component {
     this.startX = x;
     this.starY = y;
     this.setState({ isDown: true });
-    this.drawContent.onmousemove = this.handleMouseMove;
+    this.drawContent.onmousemove = throttle(this.handleMouseMove, 32);
     this.drawContent.onmouseup = this.handleMouseUp;
   }
 
@@ -65,13 +81,17 @@ class Content extends Component {
   handleMouseUp = () => {
     this.drawContent.onmousemove = null;
     this.drawContent.onmouseup = null;  
-    this.setState(({top, left, positionLeft, positionTop}) => ({
+    const {positionTop, positionLeft} = this.state;
+    const {top, left, setState} = this.props.addStore;
+    this.setState({
       isDown: false,
+      positionTop: 0,
+      positionLeft: 0,
+    });
+    setState({
       top: top + positionTop,
       left: left + positionLeft,
-      positionTop: 0,
-      positionLeft: 0
-    }));
+    })
   }
 
   handleChange = (value, type) => {
@@ -88,7 +108,7 @@ class Content extends Component {
           <div className='text1'>预览节点</div>
           <div className='text2'>(编辑完成拖入左侧画布)</div>
         </PreviewTitle>
-        <PreviewBox><DrawPreItem title={title} firstText={firstText} mutualType={mutualType}/></PreviewBox>
+        <PreviewBox>{this.props.addStore.addVisible && <DrawPreItem title={title} firstText={firstText} mutualType={mutualType}/>}</PreviewBox>
       </PreviewContent>
     );
   };
@@ -121,13 +141,17 @@ class Content extends Component {
   }
   
   render() {
-    const {scale, addVisible, setState} = this.props.addStore;
-    const {positionLeft, positionTop, isDown, left, top} = this.state;
+    const {scale, addVisible, setState, drawList, left, top} = this.props.addStore;
+    const {positionLeft, positionTop, isDown} = this.state;
     return (
       <Container id='draw'>
         <CanvasContent left={left + positionLeft} top={top + positionTop} isDown={isDown} id='draw-content' scale={scale}>
-          <Text>asdasdasdasd</Text>
-          <Text1>asdasdasdasd</Text1>
+          {
+            drawList.map(({left: itemLeft, top: itemTop, ...args}, index) => (
+              <DrawItem {...args} left={itemLeft} top={itemTop} key={`${itemTop}_${index}_${itemLeft}`}/>
+            ))
+          }
+          <Canvas ref={obj => this.canvas = obj}></Canvas>
         </CanvasContent>
         <Drawer
           id='drawer'
@@ -241,4 +265,11 @@ const PreviewBox = styled.div`
   align-items: center;
   justify-content: center;
   border: dashed 2px #eee;
+`;
+
+const Canvas = styled.canvas`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
 `;

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
-import {Container, ContentLeft, LeftTitle, LeftContent, ContentRight, RightItem} from './draw.style';
+import {Container1, ContentLeft, LeftTitle, LeftContent, ContentRight, RightItem} from './draw.style';
+import {throttle} from '../../../utils/normal.utils';
 
 @inject('addStore') @observer
 class DrawItem extends Component {
@@ -8,12 +9,11 @@ class DrawItem extends Component {
         super(props);
         this.state = {
             isDown: false,
-            left: null,
-            top: null,
+            left: props.left || 50,
+            top: props.top || 200,
             positionTop: 0,
             positionLeft: 0,
         };
-        this.isFixed = false;
     }
 
     componentDidMount() {
@@ -21,39 +21,28 @@ class DrawItem extends Component {
     }
 
     handleMouseDown = e => {
-        const {layerX, layerY, clientX, clientY} = e;
-        const origX = clientX - layerX;
-        const origY = clientY - layerY;
+        e.stopPropagation()
+        const {clientX, clientY} = e;
         this.startX = clientX;
         this.starY = clientY;
-        this.setState({
-            isDown: true,
-            left: origX,
-            top: origY,
-        });
+        this.setState({ isDown: true});
         document.onmouseup = this.handleMouseup;
-        document.onmousemove = this.handleMouseMove;
+        document.onmousemove = throttle(this.handleMouseMove, 32);
     }
 
     handleMouseMove = e => {
+        e.stopPropagation()
         const {clientX, clientY} = e;
-        if (!this.isFixed && (clientX - this.startX) < -250) {
-            this.isFixed = true;
-        }
         this.setState({
             positionLeft: (clientX - this.startX),
             positionTop: (clientY - this.starY)
         }) 
     }
 
-    handleMouseup = () => {
-        const {top, left, positionLeft, positionTop, title, firstText, mutualType} = this.state;
+    handleMouseup = e => {
+        e.stopPropagation();
         this.setState(({top, left, positionLeft, positionTop}) => {
             const t = top + positionTop, l =left + positionLeft;
-            if (this.isFixed) {
-                this.props.addStore.setState({addVisible: false});
-                this.props.addStore.addDrawItem({left: l, top: t, title, firstText, mutualType})
-            }
             return {
                 isDown: false,
                 top: t,
@@ -62,7 +51,6 @@ class DrawItem extends Component {
                 positionLeft: 0
             }
         });
-        
         document.onmousemove = null;
         document.onmouseup = null;  
     }
@@ -71,7 +59,7 @@ class DrawItem extends Component {
         const {title, firstText, mutualType} = this.props;
         const {isDown, left, top, positionLeft, positionTop} = this.state;
         return (
-            <Container ref={obj => this.draw = obj} isFixed={this.isFixed} isFocus={isDown} left={positionLeft + left} top={top + positionTop}>
+            <Container1 ref={obj => this.draw = obj} isFocus={isDown} left={positionLeft + left} top={top + positionTop}>
                 <ContentLeft>
                     <LeftTitle isEmpty={!title}>{title || '请编辑标题'}</LeftTitle>
                     <LeftContent isEmpty={firstText}>{firstText || '请编辑首轮话术'}</LeftContent>
@@ -83,7 +71,7 @@ class DrawItem extends Component {
                         <RightItem>其他</RightItem>
                     </ContentRight>
                 )}
-            </Container>
+            </Container1>
         );
     }
 }

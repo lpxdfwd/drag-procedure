@@ -3,13 +3,17 @@ import {observable, action} from 'mobx';
 class IndexStore {
   @observable scale = 1;
 
-  @observable positionTop = 0;
-
-  @observable positionLeft = 0;
-
   @observable addVisible = false
 
   @observable.deep drawList = [];
+
+  @observable left = -8000;
+
+  @observable top = -8000;
+
+  @observable parentW = 0;
+
+  @observable parentH = 0;
 
   @action.bound setState(obj) {
     for (let i in obj) {
@@ -28,7 +32,11 @@ class IndexStore {
   }
 
   @action addDrawItem = (option) => {
-    this.drawList = [].concat(this.drawList, option);
+    this.drawList = this.drawList.concat({
+      ...option,
+      left: option.left - this.left - this.parentW / 2,
+      top: option.top - this.top - 100 - this.parentH / 2
+    });
   }
 }
 

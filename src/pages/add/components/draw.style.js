@@ -15,6 +15,19 @@ export const Container = styled.div`
     ` : ''}
 `;
 
+export const Container1 = styled.div`
+    display: flex;
+    border: ${({isFocus}) => isFocus ? 'dashed 2px #666' : 'solid 1px #eee'};
+    border-radius: 8px;
+    overflow: hidden;
+    user-select:none;
+    cursor: ${({isFocus}) => isFocus ? 'grabbing' : 'grab'};
+    position: absolute;
+    top: ${props => `${props.top}px`};
+    left: ${props => `${props.left}px`};
+    z-index: 2;
+`;
+
 export const ContentLeft = styled.div`
     width: 150px;
     font-size: 0;

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
 import {Container, ContentLeft, LeftTitle, LeftContent, ContentRight, RightItem} from './draw.style';
+import {throttle} from '../../../utils/normal.utils';
 
 @inject('addStore') @observer
 class DrawPreItem extends Component {
@@ -32,7 +33,7 @@ class DrawPreItem extends Component {
             top: origY,
         });
         document.onmouseup = this.handleMouseup;
-        document.onmousemove = this.handleMouseMove;
+        document.onmousemove = throttle(this.handleMouseMove, 32);;
     }
 
     handleMouseMove = e => {
@@ -47,7 +48,7 @@ class DrawPreItem extends Component {
     }
 
     handleMouseup = () => {
-        const {top, left, positionLeft, positionTop, title, firstText, mutualType} = this.state;
+        const {title, firstText, mutualType} = this.props;
         this.setState(({top, left, positionLeft, positionTop}) => {
             const t = top + positionTop, l =left + positionLeft;
             if (this.isFixed) {
