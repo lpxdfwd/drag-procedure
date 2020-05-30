@@ -33,9 +33,10 @@ class DrawItem extends Component {
     handleMouseMove = e => {
         e.stopPropagation()
         const {clientX, clientY} = e;
+        const {scale} = this.props.addStore;
         this.setState({
-            positionLeft: (clientX - this.startX),
-            positionTop: (clientY - this.starY)
+            positionLeft: (clientX - this.startX) / scale,
+            positionTop: (clientY - this.starY) / scale
         }) 
     }
 

@@ -7,9 +7,9 @@ class IndexStore {
 
   @observable.deep drawList = [];
 
-  @observable left = -8000;
+  @observable left = -2500;
 
-  @observable top = -8000;
+  @observable top = -2500;
 
   @observable parentW = 0;
 
@@ -24,18 +24,30 @@ class IndexStore {
   }
 
   @action.bound onToBig() {
+    const oldBase = -2500 * this.scale;
     this.scale += 0.2;
+    const base = -2500 * this.scale;
+    const desL = oldBase - this.left;
+    const desT = oldBase - this.top;
+    this.left = base - desL;
+    this.top = base - desT;
   }
 
   @action.bound onToSmall() {
+    const oldBase = -2500 * this.scale;
     this.scale -= 0.2;
+    const base = -2500 * this.scale;
+    const desL = oldBase - this.left;
+    const desT = oldBase - this.top;
+    this.left = base - desL;
+    this.top = base - desT;
   }
 
   @action addDrawItem = (option) => {
     this.drawList = this.drawList.concat({
       ...option,
-      left: option.left - this.left - this.parentW / 2,
-      top: option.top - this.top - 100 - this.parentH / 2
+      left: (option.left / this.scale - (this.left) / this.scale),
+      top: (option.top / this.scale - (this.top) / this.scale - 100)
     });
   }
 }

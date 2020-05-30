@@ -39,7 +39,9 @@ class Content extends Component {
     this.parentH = this.drawContent?.parentNode?.clientHeight ?? 0;
     this.props.addStore.setState({
       parentW: this.parentW,
-      parentH: this.parentH
+      parentH: this.parentH,
+      windowW: document.body.clientWidth,
+      windowH: document.body.clientHeight
     })
   }
 
@@ -58,23 +60,24 @@ class Content extends Component {
   handleMouseDown = (e) => {
     const {x, y} = e;
     this.startX = x;
-    this.starY = y;
+    this.startY = y;
     this.setState({ isDown: true });
     this.drawContent.onmousemove = throttle(this.handleMouseMove, 32);
     this.drawContent.onmouseup = this.handleMouseUp;
   }
 
   handleMouseMove = (e) => {
-    const {positionTop, positionLeft, left, top} = this.state;
+    const {scale, windowW, windowH, left, top} = this.props.addStore;
     const {x, y} = e;
-    if ((top + positionTop) >= -100 && y > this.starY) return;
-    if (y < this.startY && (top + positionTop) <= -12000) return;
-    if (x > this.startX && (left + positionLeft) >= -100) return;
-    if (x < this.startX && (left + positionLeft) <= -12000) return;
-    
+    const pl = (x - this.startX), pt = (y - this.startY);
+    if ((top + pt) >= 50 && y > this.startY) return;
+    if (y < this.startY && (top + pt - windowH + 100) <= -8050 * scale) return;
+    if (x > this.startX && (left + pl) >= 50) return;
+    if (x < this.startX && (left + pl - windowW) <= -8050 * scale) return;
+    // console.log(left, left + pl - windowW, -8050 * scale)
     this.setState({
-      positionLeft: (x - this.startX),
-      positionTop: (y - this.starY)
+      positionLeft: pl,
+      positionTop: pt
     }) 
   }
 
@@ -181,13 +184,14 @@ const Container = styled.div`
 `;
 
 const CanvasContent = styled.div`
-  width: 16000px;
-  height: 16000px;
+  width: 8000px;
+  height: 8000px;
   position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: ${({left, top}) =>  `${top}px 0 0 ${left}px`};
+  background: yellow;
+  left: ${props => `${props.left}px`};
+  top: ${props => `${props.top}px`};
   transform: ${props => `scale(${props.scale},${props.scale})`};
+  transform-origin: 0 0;
   cursor: ${props => props.isDown ? 'grabbing' : 'grab'};
 `;
 
