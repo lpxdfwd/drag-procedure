@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
 import {Container1, ContentLeft, LeftTitle, LeftContent, ContentRight, RightItem} from './draw.style';
 import {throttle} from '../../../utils/normal.utils';
+import StopItem from './spot.item';
+import {ContextHOC} from '../../../components/context';
 
+@ContextHOC
 @inject('addStore') @observer
 class DrawItem extends Component {
     constructor(props) {
@@ -27,16 +30,20 @@ class DrawItem extends Component {
         this.starY = clientY;
         this.setState({ isDown: true});
         document.onmouseup = this.handleMouseup;
-        document.onmousemove = throttle(this.handleMouseMove, 32);
+        document.onmousemove = throttle(this.handleMouseMove, 60);
     }
 
     handleMouseMove = e => {
         e.stopPropagation()
         const {clientX, clientY} = e;
+        const {positionLeft, positionTop} = this.state;
         const {scale} = this.props.addStore;
+        const pl = (clientX - this.startX) / scale;
+        const pt = (clientY - this.starY) / scale;
+        this.props.ctx.updatePosition(this.props.item.key, pl - positionLeft, pt - positionTop);
         this.setState({
-            positionLeft: (clientX - this.startX) / scale,
-            positionTop: (clientY - this.starY) / scale
+            positionLeft: pl ,
+            positionTop: pt
         }) 
     }
 
@@ -57,19 +64,19 @@ class DrawItem extends Component {
     }
 
     render() {
-        const {title, firstText, mutualType} = this.props;
+        const {title, firstText, mutualType, key} = this.props.item;
         const {isDown, left, top, positionLeft, positionTop} = this.state;
         return (
             <Container1 ref={obj => this.draw = obj} isFocus={isDown} left={positionLeft + left} top={top + positionTop}>
                 <ContentLeft>
-                    <LeftTitle isEmpty={!title}>{title || '请编辑标题'}</LeftTitle>
+                    <LeftTitle isEmpty={!title}>{title || '请编辑标题'}<StopItem itemKey={key} type='left'/></LeftTitle>
                     <LeftContent isEmpty={firstText}>{firstText || '请编辑首轮话术'}</LeftContent>
                 </ContentLeft>
                 {mutualType === '1' && (
                     <ContentRight>
-                        <RightItem>肯定</RightItem>
-                        <RightItem>否定</RightItem>
-                        <RightItem>其他</RightItem>
+                        <RightItem>肯定<StopItem itemKey={key} type='right'/></RightItem>
+                        <RightItem>否定<StopItem itemKey={key} type='right'/></RightItem>
+                        <RightItem>其他<StopItem itemKey={key} type='right'/></RightItem>
                     </ContentRight>
                 )}
             </Container1>

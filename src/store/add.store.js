@@ -15,6 +15,8 @@ class IndexStore {
 
   @observable parentH = 0;
 
+  @observable lineing = false
+
   @action.bound setState(obj) {
     for (let i in obj) {
       if (obj.hasOwnProperty(i)) {
@@ -23,19 +25,13 @@ class IndexStore {
     }
   }
 
-  @action.bound onToBig() {
+  @action.bound onChangeSize(type = 'big') {
     const oldBase = -2500 * this.scale;
-    this.scale += 0.2;
-    const base = -2500 * this.scale;
-    const desL = oldBase - this.left;
-    const desT = oldBase - this.top;
-    this.left = base - desL;
-    this.top = base - desT;
-  }
-
-  @action.bound onToSmall() {
-    const oldBase = -2500 * this.scale;
-    this.scale -= 0.2;
+    if (type === 'big') {
+      this.scale += 0.2;
+    } else {
+      this.scale -= 0.2;
+    }
     const base = -2500 * this.scale;
     const desL = oldBase - this.left;
     const desT = oldBase - this.top;
@@ -46,8 +42,8 @@ class IndexStore {
   @action addDrawItem = (option) => {
     this.drawList = this.drawList.concat({
       ...option,
-      left: (option.left / this.scale - (this.left) / this.scale),
-      top: (option.top / this.scale - (this.top) / this.scale - 100)
+      left: option.left / this.scale - this.left / this.scale,
+      top: option.top / this.scale - this.top / this.scale - 100
     });
   }
 }

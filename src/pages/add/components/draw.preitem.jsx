@@ -53,7 +53,7 @@ class DrawPreItem extends Component {
             const t = top + positionTop, l =left + positionLeft;
             if (this.isFixed) {
                 this.props.addStore.setState({addVisible: false});
-                this.props.addStore.addDrawItem({left: l, top: t, title, firstText, mutualType})
+                this.props.addStore.addDrawItem({left: l, top: t, title, firstText, mutualType, key: +new Date()})
             }
             return {
                 isDown: false,

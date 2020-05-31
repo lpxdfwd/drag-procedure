@@ -19,7 +19,6 @@ export const Container1 = styled.div`
     display: flex;
     border: ${({isFocus}) => isFocus ? 'dashed 2px #666' : 'solid 1px #eee'};
     border-radius: 8px;
-    overflow: hidden;
     user-select:none;
     cursor: ${({isFocus}) => isFocus ? 'grabbing' : 'grab'};
     position: absolute;
@@ -45,6 +44,7 @@ export const LeftTitle = styled.div`
     font-size: 14px;
     line-height: 24px;
     word-break: break-all;
+    position: relative;
 `;
 
 export const LeftContent = styled.div`
@@ -73,6 +73,7 @@ export const RightItem = styled.div`
     display: flex;
     align-items: center;
     box-sizing: border-box;
+    position: relative;
     & + & {
         border-top: solid 1px #eee;
     }

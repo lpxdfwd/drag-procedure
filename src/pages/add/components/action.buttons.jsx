@@ -2,6 +2,7 @@ import React from 'react';
 import {inject, observer} from 'mobx-react';
 import { Button, message } from 'antd';
 import styled from 'styled-components';
+import {ContextHOC} from '../../../components/context';
 
 
 const ActionButtons = inject('addStore')(observer(props => {
@@ -9,14 +10,15 @@ const ActionButtons = inject('addStore')(observer(props => {
     if (props.addStore.scale >= 3) {
       return message.info('已经是最大了');
     }
-    props.addStore.onToBig && props.addStore.onToBig();
+    props.addStore.onChangeSize && props.addStore.onChangeSize('big');
+    console.log(props.ctx);
   };
 
   const handleToSmall = () => {
     if (props.addStore.scale <= 0.6) {
       return message.info('不能再小了');
     };
-    props.addStore.onToSmall && props.addStore.onToSmall();
+    props.addStore.onChangeSize && props.addStore.onChangeSize('small');
   };
 
   const handleShowAdd = () => {
@@ -24,6 +26,8 @@ const ActionButtons = inject('addStore')(observer(props => {
     if (addVisible) return;
     setState && setState({addVisible: true});
   };
+
+  
 
   return (
     <Container>
@@ -34,12 +38,12 @@ const ActionButtons = inject('addStore')(observer(props => {
   );
 }));
 
-export default ActionButtons;
+export default ContextHOC(ActionButtons);
 
 const Container = styled.div`
   position: absolute;
   left: 50px;
-  top: 150px;
+  top: 50px;
   z-index: 1000;
   display: flex;
   .ant-btn {

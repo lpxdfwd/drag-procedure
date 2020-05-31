@@ -28,6 +28,6 @@ export const  HeaderItemLabel = styled.div`
   font-size: 16px;
   color: #333;
   margin-right: 16px;
-  width: 80px;
+  width: 90px;
   text-align: right;
 `;

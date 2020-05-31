@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import DrawPreItem from './draw.preitem';
 import DrawItem from './draw.item';
 import {throttle} from '../../../utils/normal.utils';
+import {MyProvider} from '../../../components/context';
+import ActionButtons from './action.buttons';
+import CanvasMethod from './canvas.method';
 
 class Content extends Component {
   constructor(props) {
@@ -26,12 +29,7 @@ class Content extends Component {
     document.onkeydown = this.handleKeyDown;
     this.initParentSize();
     window.onresize = throttle(this.initParentSize, 50);
-    // this.canvas.setAttribute('width', 16000+'px');
-    // this.canvas.setAttribute('height',16000+'px');
-    // const cxt = this.canvas.getContext('2d');
-    // cxt.moveTo(7800,7800);
-    // cxt.lineTo(7900, 7900);
-    // cxt.stroke();
+    this.canvasCtx = new CanvasMethod(this.canvas);
   }
 
   initParentSize = () => {
@@ -70,10 +68,10 @@ class Content extends Component {
     const {scale, windowW, windowH, left, top} = this.props.addStore;
     const {x, y} = e;
     const pl = (x - this.startX), pt = (y - this.startY);
-    if ((top + pt) >= 50 && y > this.startY) return;
-    if (y < this.startY && (top + pt - windowH + 100) <= -8050 * scale) return;
-    if (x > this.startX && (left + pl) >= 50) return;
-    if (x < this.startX && (left + pl - windowW) <= -8050 * scale) return;
+    if ((top + pt) >= -50 && y > this.startY) return;
+    if (y < this.startY && (top + pt - windowH + 100) <= -7950 * scale) return;
+    if (x > this.startX && (left + pl) >= -50) return;
+    if (x < this.startX && (left + pl - windowW) <= -7950 * scale) return;
     // console.log(left, left + pl - windowW, -8050 * scale)
     this.setState({
       positionLeft: pl,
@@ -144,32 +142,35 @@ class Content extends Component {
   }
   
   render() {
-    const {scale, addVisible, setState, drawList, left, top} = this.props.addStore;
+    const {scale, addVisible, setState, drawList, left, top, lineing} = this.props.addStore;
     const {positionLeft, positionTop, isDown} = this.state;
     return (
-      <Container id='draw'>
-        <CanvasContent left={left + positionLeft} top={top + positionTop} isDown={isDown} id='draw-content' scale={scale}>
-          {
-            drawList.map(({left: itemLeft, top: itemTop, ...args}, index) => (
-              <DrawItem {...args} left={itemLeft} top={itemTop} key={`${itemTop}_${index}_${itemLeft}`}/>
-            ))
-          }
-          <Canvas ref={obj => this.canvas = obj}></Canvas>
-        </CanvasContent>
-        <Drawer
-          id='drawer'
-          title="新增节点"
-          placement="right"
-          closable={false}
-          onClose={() => setState({addVisible: false})}
-          visible={addVisible}
-          mask={false}
-          width={400}
-        >
-          {this.renderForm()}
-          {this.renderPreview()}
-        </Drawer>
-      </Container>
+      <MyProvider value={this.canvasCtx}>
+        <Container id='draw'>
+          <CanvasContent left={left + positionLeft} lineing={lineing} top={top + positionTop} isDown={isDown} id='draw-content' scale={scale}>
+            {
+              drawList.map(({left: itemLeft, top: itemTop, ...args}, index) => (
+                <DrawItem item={args} left={itemLeft} top={itemTop} key={args.key}/>
+              ))
+            }
+            <Canvas ref={obj => this.canvas = obj}></Canvas>
+          </CanvasContent>
+          <Drawer
+            id='drawer'
+            title="新增节点"
+            placement="right"
+            closable={false}
+            onClose={() => setState({addVisible: false})}
+            visible={addVisible}
+            mask={false}
+            width={400}
+          >
+            {this.renderForm()}
+            {this.renderPreview()}
+          </Drawer>
+          <ActionButtons />
+        </Container>
+      </MyProvider>
     );
   }
 };
@@ -187,12 +188,12 @@ const CanvasContent = styled.div`
   width: 8000px;
   height: 8000px;
   position: absolute;
-  background: yellow;
+  background: #fff;
   left: ${props => `${props.left}px`};
   top: ${props => `${props.top}px`};
   transform: ${props => `scale(${props.scale},${props.scale})`};
   transform-origin: 0 0;
-  cursor: ${props => props.isDown ? 'grabbing' : 'grab'};
+  cursor: ${props => props.lineing ? 'crosshair' : (props.isDown ? 'grabbing' : 'grab')};
 `;
 
 const Text = styled.div`
