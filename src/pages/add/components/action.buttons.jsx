@@ -15,7 +15,7 @@ const ActionButtons = inject('addStore')(observer(props => {
   };
 
   const handleToSmall = () => {
-    if (props.addStore.scale <= 0.6) {
+    if (props.addStore.scale <= 0.7) {
       return message.info('不能再小了');
     };
     props.addStore.onChangeSize && props.addStore.onChangeSize('small');

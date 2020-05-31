@@ -64,6 +64,7 @@ export const ContentRight = styled.div`
     display: flex;
     flex-direction: column;
     border-left: solid 1px #eee;
+    background: #fff;
 `;
 
 export const RightItem = styled.div`

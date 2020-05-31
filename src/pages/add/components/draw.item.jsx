@@ -23,6 +23,10 @@ class DrawItem extends Component {
         this.draw.onmousedown = this.handleMouseDown;
     }
 
+    handleSelectItem = () => {
+        this.props.addStore.setState({selectItem: this.props.item.key});
+    }
+
     handleMouseDown = e => {
         e.stopPropagation()
         const {clientX, clientY} = e;
@@ -40,7 +44,9 @@ class DrawItem extends Component {
         const {scale} = this.props.addStore;
         const pl = (clientX - this.startX) / scale;
         const pt = (clientY - this.starY) / scale;
-        this.props.ctx.updatePosition(this.props.item.key, pl - positionLeft, pt - positionTop);
+        if (this.props.ctx.cacheLines.length) {
+            this.props.ctx.updatePosition(this.props.item.key, pl - positionLeft, pt - positionTop);
+        }
         this.setState({
             positionLeft: pl ,
             positionTop: pt
@@ -66,8 +72,9 @@ class DrawItem extends Component {
     render() {
         const {title, firstText, mutualType, key} = this.props.item;
         const {isDown, left, top, positionLeft, positionTop} = this.state;
+        const {selectItem} = this.props.addStore;
         return (
-            <Container1 ref={obj => this.draw = obj} isFocus={isDown} left={positionLeft + left} top={top + positionTop}>
+            <Container1 onClick={this.handleSelectItem} ref={obj => this.draw = obj} isFocus={isDown || selectItem === key} left={positionLeft + left} top={top + positionTop}>
                 <ContentLeft>
                     <LeftTitle isEmpty={!title}>{title || '请编辑标题'}<StopItem itemKey={key} type='left'/></LeftTitle>
                     <LeftContent isEmpty={firstText}>{firstText || '请编辑首轮话术'}</LeftContent>

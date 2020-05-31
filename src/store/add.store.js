@@ -15,7 +15,9 @@ class IndexStore {
 
   @observable parentH = 0;
 
-  @observable lineing = false
+  @observable lineing = false;
+
+  @observable selectItem = null;
 
   @action.bound setState(obj) {
     for (let i in obj) {
@@ -35,8 +37,22 @@ class IndexStore {
     const base = -2500 * this.scale;
     const desL = oldBase - this.left;
     const desT = oldBase - this.top;
-    this.left = base - desL;
-    this.top = base - desT;
+    const newLeft = base - desL;
+    const newTop = base - desT;
+    if (newLeft >= -50) {
+      this.left = -50;
+    } else if (newLeft - this.windowW  <= -7950 * this.scale) {
+      this.left = -7950 * this.scale + this.windowW;
+    } else {
+      this.left = newLeft;
+    }
+    if (newTop >= -50) {
+      this.top = -50;
+    } else if (newTop - this.windowH + 100 <= -7950 * this.scale) {
+      this.top = -7950 * this.scale + this.windowH - 100;
+    } else {
+      this.top = newTop;
+    }
   }
 
   @action addDrawItem = (option) => {

@@ -45,13 +45,24 @@ class Content extends Component {
 
   handleKeyDown = e => {
     if (e && e.keyCode === 27) this.handleHideDrawer();
+    if (e && e.keyCode === 8) this.handleDeleteSelect();
+  }
+
+  handleDeleteSelect = () => {
+    const {setState, drawList, selectItem} = this.props.addStore;
+    this.canvasCtx.delectCacheItem(selectItem);
+    setState({
+      selectItem: null,
+      drawList: drawList.filter(({key}) => key !== selectItem)
+    });
   }
 
   handleHideDrawer = () => {
     const {addVisible, setState} = this.props.addStore;
     if (!addVisible) return;
     setState && setState({
-      addVisible: false
+      addVisible: false,
+      selectItem: null
     })
   }
 

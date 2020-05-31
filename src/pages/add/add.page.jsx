@@ -3,12 +3,12 @@ import {inject, observer} from 'mobx-react';
 import {Container, Header} from './style';
 import PageHeader from './components/header';
 import Content from './components/content';
+import {removeEvent} from '../../lib/event.lib';
 
 @inject('addStore') @observer
 class AddPage extends Component {
-  constructor() {
-    super();
-    this.state = {};
+  componentWillUnmount() {
+    removeEvent('setLineArrow');
   }
 
   render() {
