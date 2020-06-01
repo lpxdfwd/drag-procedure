@@ -21,6 +21,10 @@ class DrawPreItem extends Component {
         this.draw.onmousedown = this.handleMouseDown;
     }
 
+    componentWillUnmount() {
+        this.draw.onmousedown = null;
+    }
+
     handleMouseDown = e => {
         const {layerX, layerY, clientX, clientY} = e;
         const origX = clientX - layerX;

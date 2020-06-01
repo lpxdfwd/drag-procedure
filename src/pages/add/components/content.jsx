@@ -8,6 +8,8 @@ import {throttle} from '../../../utils/normal.utils';
 import {MyProvider} from '../../../components/context';
 import ActionButtons from './action.buttons';
 import CanvasMethod from './canvas.method';
+import EndpointItem from './endpoint.item';
+import {eventEmit} from '../../../lib/event.lib';
 
 class Content extends Component {
   constructor(props) {
@@ -32,6 +34,12 @@ class Content extends Component {
     this.canvasCtx = new CanvasMethod(this.canvas);
   }
 
+  componentWillUnmount() {
+    this.drawContent.onmousedown = null;
+    document.onkeydown = null;
+    window.onresize = null;
+  }
+
   initParentSize = () => {
     this.parentW = this.drawContent?.parentNode?.clientWidth ?? 0;
     this.parentH = this.drawContent?.parentNode?.clientHeight ?? 0;
@@ -44,8 +52,11 @@ class Content extends Component {
   }
 
   handleKeyDown = e => {
-    if (e && e.keyCode === 27) this.handleHideDrawer();
-    if (e && e.keyCode === 8) this.handleDeleteSelect();
+    if (e) {
+      if (e.keyCode === 27) this.handleHideDrawer();
+      if (e.keyCode === 8) this.handleDeleteSelect();
+      if (e.keyCode === 18) eventEmit('altEvent');
+    }
   }
 
   handleDeleteSelect = () => {
@@ -164,6 +175,8 @@ class Content extends Component {
                 <DrawItem item={args} left={itemLeft} top={itemTop} key={args.key}/>
               ))
             }
+            <EndpointItem type='start' key='start'/>
+            <EndpointItem type='end' key='end'/>
             <Canvas ref={obj => this.canvas = obj}></Canvas>
           </CanvasContent>
           <Drawer

@@ -19,7 +19,7 @@ export const Container1 = styled.div`
     display: flex;
     border: ${({isFocus}) => isFocus ? 'dashed 2px #666' : 'solid 1px #eee'};
     border-radius: 8px;
-    user-select:none;
+    user-select: none;
     cursor: ${({isFocus}) => isFocus ? 'grabbing' : 'grab'};
     position: absolute;
     top: ${props => `${props.top}px`};

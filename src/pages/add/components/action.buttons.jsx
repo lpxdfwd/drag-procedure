@@ -27,8 +27,6 @@ const ActionButtons = inject('addStore')(observer(props => {
     setState && setState({addVisible: true});
   };
 
-  
-
   return (
     <Container>
       <Button onClick={handleShowAdd}>新增节点</Button>
@@ -43,7 +41,7 @@ export default ContextHOC(ActionButtons);
 const Container = styled.div`
   position: absolute;
   left: 50px;
-  top: 50px;
+  top: 20px;
   z-index: 1000;
   display: flex;
   .ant-btn {

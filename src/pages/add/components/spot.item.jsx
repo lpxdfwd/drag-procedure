@@ -26,6 +26,11 @@ class SpotItem extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.spot.onmouseup = null;
+    this.spot.onmousedown = null;
+  }
+
   handleSetLineArrow = () => {
     const {itemKey} = this.props;
     console.log(itemKey)

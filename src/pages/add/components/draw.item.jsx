@@ -23,6 +23,10 @@ class DrawItem extends Component {
         this.draw.onmousedown = this.handleMouseDown;
     }
 
+    componentWillUnmount() {
+        this.draw.onmousedown = null;
+    }
+
     handleSelectItem = () => {
         this.props.addStore.setState({selectItem: this.props.item.key});
     }

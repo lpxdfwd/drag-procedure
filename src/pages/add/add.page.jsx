@@ -9,6 +9,7 @@ import {removeEvent} from '../../lib/event.lib';
 class AddPage extends Component {
   componentWillUnmount() {
     removeEvent('setLineArrow');
+    removeEvent('altEvent');
   }
 
   render() {
