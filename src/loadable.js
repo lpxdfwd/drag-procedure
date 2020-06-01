@@ -14,3 +14,5 @@ const dynamic = loader => Loadable({
 export const IndexPage = dynamic(() => import(/* webpackChunkName: 'index-page' */'./pages/index/index.page.jsx'));
 
 export const AddPage = dynamic(() => import(/* webpackChunkName: 'add-page' */'./pages/add/add.page.jsx'));
+
+export const LoginPage = dynamic(() => import(/* webpackChunkName: 'add-page' */'./pages/login/login.page.jsx'));

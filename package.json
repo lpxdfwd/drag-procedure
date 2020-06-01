@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "proxy": "http://112.124.202.207:8080/",
   "scripts": {
     "start": "wu-yan run start",
     "build": "wu-yan run build",
@@ -12,6 +13,7 @@
     "antd": "^4.2.2",
     "axios": "0.19.2",
     "core-js": "3.6.5",
+    "cookie": "^0.4.0",
     "history": "^4.9.0",
     "mobx": "4.9.4",
     "mobx-react": "5.4.4",

@@ -19,6 +19,18 @@ class IndexStore {
 
   @observable selectItem = null;
 
+  @action.bound reset() {
+    this.scale = 1;
+    this.addVisible = false;
+    this.drawList = [];
+    this.left = -2500;
+    this.top = -2500;
+    this.parentW = 0;
+    this.parentH = 0;
+    this.lineing = false;
+    this.selectItem = null;
+  }
+
   @action.bound setState(obj) {
     for (let i in obj) {
       if (obj.hasOwnProperty(i)) {
