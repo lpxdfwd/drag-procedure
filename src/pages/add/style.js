@@ -10,11 +10,15 @@ export const Container = styled.div`
 
 export const Header = styled.div`
   width: 100%;
-  height: 100px;
+  height: 80px;
   display: flex;
   padding-left: 50px;
   box-shadow: 0 2px 20px 2px rgba(0, 0, 0, .2);
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
 `
 
 export const HeaderItem = styled.div`

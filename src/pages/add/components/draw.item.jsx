@@ -48,8 +48,8 @@ class DrawItem extends Component {
         const {scale} = this.props.addStore;
         const pl = (clientX - this.startX) / scale;
         const pt = (clientY - this.starY) / scale;
-        if (this.props.ctx.cacheLines.length) {
-            this.props.ctx.updatePosition(this.props.item.key, pl - positionLeft, pt - positionTop);
+        if (this.props.ctx.curr.cacheLines.length) {
+            this.props.ctx.curr.updatePosition(this.props.item.key, pl - positionLeft, pt - positionTop);
         }
         this.setState({
             positionLeft: pl ,

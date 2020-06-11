@@ -7,7 +7,7 @@ import DrawItem from './draw.item';
 import {throttle} from '../../../utils/normal.utils';
 import {MyProvider} from '../../../components/context';
 import ActionButtons from './action.buttons';
-import CanvasMethod from './canvas.method';
+import {CanvasMethod, CanvasTowMethod} from './canvas.method';
 import EndpointItem from './endpoint.item';
 import {eventEmit} from '../../../lib/event.lib';
 
@@ -32,6 +32,7 @@ class Content extends Component {
     this.initParentSize();
     window.onresize = throttle(this.initParentSize, 50);
     this.canvasCtx = new CanvasMethod(this.canvas);
+    this.canvasTowCtx = new CanvasTowMethod(this.canvasTwo);
   }
 
   componentWillUnmount() {
@@ -167,7 +168,7 @@ class Content extends Component {
     const {scale, addVisible, setState, drawList, left, top, lineing} = this.props.addStore;
     const {positionLeft, positionTop, isDown} = this.state;
     return (
-      <MyProvider value={this.canvasCtx}>
+      <MyProvider value={{curr: this.canvasCtx, showRef: this.canvasTowCtx}}>
         <Container id='draw'>
           <CanvasContent left={left + positionLeft} lineing={lineing} top={top + positionTop} isDown={isDown} id='draw-content' scale={scale}>
             {
@@ -194,6 +195,7 @@ class Content extends Component {
           </Drawer>
           <ActionButtons />
         </Container>
+        <CanvasTwo ref={obj => this.canvasTwo = obj}/>
       </MyProvider>
     );
   }
@@ -203,16 +205,18 @@ export default inject('addStore')(observer(Content));
 
 const Container = styled.div`
   width: 100vw;
-  flex: 1;
   overflow: hidden;
-  position: relative;
+  position: fixed;
+  top: 100px;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
 `;
 
 const CanvasContent = styled.div`
   width: 8000px;
   height: 8000px;
   position: absolute;
-  background: #fff;
   left: ${props => `${props.left}px`};
   top: ${props => `${props.top}px`};
   transform: ${props => `scale(${props.scale},${props.scale})`};
@@ -302,3 +306,11 @@ const Canvas = styled.canvas`
   left: 0;
   z-index: 1;
 `;
+
+export const CanvasTwo = styled.canvas`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+`;
+

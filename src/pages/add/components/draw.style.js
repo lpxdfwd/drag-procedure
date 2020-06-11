@@ -24,7 +24,7 @@ export const Container1 = styled.div`
     position: absolute;
     top: ${props => `${props.top}px`};
     left: ${props => `${props.left}px`};
-    z-index: 2;
+    z-index: 3;
 `;
 
 export const ContentLeft = styled.div`

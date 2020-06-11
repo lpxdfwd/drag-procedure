@@ -33,7 +33,6 @@ class SpotItem extends Component {
 
   handleSetLineArrow = () => {
     const {itemKey} = this.props;
-    console.log(itemKey)
     const isLeftLine = this.handleIsLeftLine(itemKey);
     this.setState({isLeftLine});
   }
@@ -41,7 +40,8 @@ class SpotItem extends Component {
   handleOtherMouseUp = () => {
     const {lineing} = this.props.addStore;
     if (!lineing || this.props.itemKey === lineing) return;
-    this.props.ctx.update({...this.props.ctx.currLine, toId: this.props.itemKey});
+    this.props.ctx.curr.update({...this.props.ctx.curr.currLine, toId: this.props.itemKey});
+    this.props.ctx.showRef.clear();
   }
 
   handleSpotMouseDown = e => {
@@ -58,14 +58,21 @@ class SpotItem extends Component {
     document.onmouseup = null;
     document.onmousemove = null;
     this.props.addStore.setState({lineing: false});
-    if(!this.props.ctx.currLine) return;
-    this.props.ctx.setCurrLine(null);
+    if(!this.props.ctx.curr.currLine) return;
+    this.props.ctx.curr.setCurrLine(null);
+    this.props.ctx.showRef.clear();
   }
 
   handleSpotMouseMove = e => {
     const {x, y} = e;
     const {scale, left, top} = this.props.addStore;
-    this.props.ctx.setCurrLine({
+    this.props.ctx.showRef.darw({
+      formL: this.startX,
+      formT: this.startY - 100,
+      toL: x,
+      toT: y - 100,
+    }, scale);
+    this.props.ctx.curr.setCurrLine({
       formL: (this.startX - left) / scale,
       formT: (this.startY - top - 100) / scale,
       formId: this.props.itemKey,
@@ -74,7 +81,7 @@ class SpotItem extends Component {
     })
   };
 
-  handleIsLeftLine = itemKey => this.props.ctx.cacheLines.some(({toId}) => toId === itemKey);
+  handleIsLeftLine = itemKey => this.props.ctx.curr.cacheLines.some(({toId}) => toId === itemKey);
 
   render() {
     const {type, itemKey} = this.props;

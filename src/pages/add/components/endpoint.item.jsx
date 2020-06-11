@@ -45,7 +45,8 @@ class EndpointItem extends Component {
     handleOtherMouseUp = () => {
         const {lineing} = this.props.addStore;
         if (!lineing || this.props.itemKey === lineing) return;
-        this.props.ctx.update({...this.props.ctx.currLine, toId: 'end'});
+        this.props.ctx.curr.update({...this.props.ctx.curr.currLine, toId: 'end'});
+        this.props.ctx.showRef.clear();
     }
 
     handleKeyUp = e => {
@@ -69,18 +70,25 @@ class EndpointItem extends Component {
         document.onmouseup = null;
         document.onmousemove = null;
         this.props.addStore.setState({lineing: false});
-        if(!this.props.ctx.currLine) return;
-        this.props.ctx.setCurrLine(null);
+        if(!this.props.ctx.curr.currLine) return;
+        this.props.ctx.curr.setCurrLine(null);
+        this.props.ctx.showRef.clear();
     }
     
     handleSpotMouseMoveLine = e => {
         e.stopPropagation();
         const {x, y} = e;
         const {scale, left, top} = this.props.addStore;
-        this.props.ctx.setCurrLine({
+        this.props.ctx.showRef.darw({
+            formL: this.startX,
+            formT: (this.startY - 100),
+            toL: x,
+            toT: (y - 100),
+        }, scale);
+        this.props.ctx.curr.setCurrLine({
             formL: (this.startX - left) / scale,
             formT: (this.startY - top - 100) / scale,
-            formId: this.props.itemKey,
+            formId: this.props.type,
             toL: (x - left) / scale,
             toT: (y - top - 100) / scale,
         })
@@ -103,9 +111,9 @@ class EndpointItem extends Component {
         const {scale} = this.props.addStore;
         const pl = (clientX - this.startX) / scale;
         const pt = (clientY - this.starY) / scale;
-        // if (this.props.ctx.cacheLines.length) {
-        //     this.props.ctx.updatePosition(this.props.item.key, pl - positionLeft, pt - positionTop);
-        // }
+        if (this.props.ctx.curr.cacheLines.length) {
+            this.props.ctx.curr.updatePosition(this.props.type, pl - positionLeft, pt - positionTop);
+        }
         this.setState({
             positionLeft: pl ,
             positionTop: pt
