@@ -19,7 +19,7 @@ class AddPage extends Component {
   componentDidMount() {
     if (!cacheLib.sessionId) {
       cacheLib.clear();
-      history.replace(LOGIN_PATH);
+      // history.replace(LOGIN_PATH);
     }
   }
 

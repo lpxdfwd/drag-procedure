@@ -80,7 +80,7 @@ class EndpointItem extends Component {
         this.props.ctx.setCurrLine({
             formL: (this.startX - left) / scale,
             formT: (this.startY - top - 100) / scale,
-            formId: this.props.itemKey,
+            formId: this.props.type,
             toL: (x - left) / scale,
             toT: (y - top - 100) / scale,
         })
@@ -103,9 +103,9 @@ class EndpointItem extends Component {
         const {scale} = this.props.addStore;
         const pl = (clientX - this.startX) / scale;
         const pt = (clientY - this.starY) / scale;
-        // if (this.props.ctx.cacheLines.length) {
-        //     this.props.ctx.updatePosition(this.props.item.key, pl - positionLeft, pt - positionTop);
-        // }
+        if (this.props.ctx.cacheLines.length) {
+            this.props.ctx.updatePosition(this.props.type, pl - positionLeft, pt - positionTop);
+        }
         this.setState({
             positionLeft: pl ,
             positionTop: pt

@@ -21,13 +21,19 @@ class DrawItem extends Component {
 
     componentDidMount() {
         this.draw.onmousedown = this.handleMouseDown;
+        document.onclick = () => {
+            if (this.props.addStore.selectItem) {
+                this.props.addStore.setState({selectItem: null});
+            }
+        }
     }
 
     componentWillUnmount() {
         this.draw.onmousedown = null;
     }
 
-    handleSelectItem = () => {
+    handleSelectItem = e => {
+        e.nativeEvent.stopImmediatePropagation();
         this.props.addStore.setState({selectItem: this.props.item.key});
     }
 
