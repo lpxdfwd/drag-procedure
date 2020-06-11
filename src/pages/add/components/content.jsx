@@ -211,6 +211,7 @@ const Container = styled.div`
   left: 0;
   bottom: 0;
   z-index: 2;
+  transform: translateZ(0);
 `;
 
 const CanvasContent = styled.div`
