@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
 import {Container, ContentLeft, LeftTitle, LeftContent, ContentRight, RightItem} from './draw.style';
 import {throttle} from '../../../utils/normal.utils';
+import {eventEmit} from '../../../lib/event.lib';
 
 @inject('addStore') @observer
 class DrawPreItem extends Component {
@@ -57,6 +58,7 @@ class DrawPreItem extends Component {
             const t = top + positionTop, l =left + positionLeft;
             if (this.isFixed) {
                 this.props.addStore.setState({addVisible: false});
+                eventEmit('clearPreForm');
                 this.props.addStore.addDrawItem({left: l, top: t, title, firstText, mutualType, key: +new Date()})
             }
             return {

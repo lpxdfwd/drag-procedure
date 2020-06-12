@@ -9,7 +9,7 @@ import {MyProvider} from '../../../components/context';
 import ActionButtons from './action.buttons';
 import {CanvasMethod, CanvasTowMethod} from './canvas.method';
 import EndpointItem from './endpoint.item';
-import {eventEmit} from '../../../lib/event.lib';
+import {eventEmit, eventOn} from '../../../lib/event.lib';
 
 class Content extends Component {
   constructor(props) {
@@ -33,6 +33,7 @@ class Content extends Component {
     window.onresize = throttle(this.initParentSize, 50);
     this.canvasCtx = new CanvasMethod(this.canvas);
     this.canvasTowCtx = new CanvasTowMethod(this.canvasTwo);
+    eventOn('clearPreForm', this.handleClearForm);
   }
 
   componentWillUnmount() {
@@ -60,6 +61,15 @@ class Content extends Component {
     }
   }
 
+  handleClearForm = () => {
+    this.setState({
+      title: '',
+      firstText: '',
+      repeatText: '',
+      mutualType: '1',
+    })
+  }
+
   handleDeleteSelect = () => {
     const {setState, drawList, selectItem} = this.props.addStore;
     this.canvasCtx.delectCacheItem(selectItem);
@@ -75,7 +85,8 @@ class Content extends Component {
     setState && setState({
       addVisible: false,
       selectItem: null
-    })
+    });
+    this.handleClearForm();
   }
 
   handleMouseDown = (e) => {
@@ -212,6 +223,8 @@ const Container = styled.div`
   bottom: 0;
   z-index: 2;
   transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
 `;
 
 const CanvasContent = styled.div`
