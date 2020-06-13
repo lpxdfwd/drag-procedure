@@ -20,7 +20,7 @@ class IndexPage extends Component {
   componentDidMount() {
     if (!cacheLib.sessionId) {
       cacheLib.clear();
-      history.replace(LOGIN_PATH);
+      // history.replace(LOGIN_PATH);
     } else {
       //主页面允许匹配非法路由，匹配到重定向
       if (history.location && history.location.pathname !== LIST_PATH) {
@@ -38,7 +38,6 @@ class IndexPage extends Component {
 
   render() {
     const {visible} = this.state;
-    console.log(visible);
     return (
       <Container>
         <Title>锦书机器人话题运营管理平台</Title>
@@ -47,7 +46,7 @@ class IndexPage extends Component {
           <List onShowSetting={this.handleShowSetting}/>
         </Content>
         <PageBottom>
-          <Button onClick={() => window.open('/add')} size='large' type='primary' icon={<PlusOutlined />}>新增</Button>
+          <Button onClick={() => window.open('/add?type=add')} size='large' type='primary' icon={<PlusOutlined />}>新增</Button>
         </PageBottom>
         <SettingModal visible={visible} onCloseModal={this.handleCloseModal}/>
       </Container>

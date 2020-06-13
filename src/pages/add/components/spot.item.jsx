@@ -40,8 +40,10 @@ class SpotItem extends Component {
   handleOtherMouseUp = () => {
     const {lineing} = this.props.addStore;
     if (!lineing || this.props.itemKey === lineing) return;
-    this.props.ctx.curr.update({...this.props.ctx.curr.currLine, toId: this.props.itemKey});
+    const {currLine} = this.props.ctx.curr;
+    this.props.ctx.curr.update({...currLine, toId: this.props.itemKey});
     this.props.ctx.showRef.clear();
+
   }
 
   handleSpotMouseDown = e => {
@@ -76,6 +78,7 @@ class SpotItem extends Component {
       formL: (this.startX - left) / scale,
       formT: (this.startY - top - 100) / scale,
       formId: this.props.itemKey,
+      formType: this.props.itemType,
       toL: (x - left) / scale,
       toT: (y - top - 100) / scale,
     })

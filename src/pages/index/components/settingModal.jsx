@@ -31,7 +31,6 @@ class SettingModal extends Component {
   handleCancel = () => this.props.onCloseModal && this.props.onCloseModal();
 
   handleChange = (val, type) => {
-    console.log(val);
     this.setState({
       [type]: val
     })

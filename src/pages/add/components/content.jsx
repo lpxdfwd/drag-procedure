@@ -4,16 +4,19 @@ import {Drawer, Input, Select} from 'antd';
 import styled from 'styled-components';
 import DrawPreItem from './draw.preitem';
 import DrawItem from './draw.item';
-import {throttle} from '../../../utils/normal.utils';
+import {throttle, fromatSearch} from '../../../utils/normal.utils';
 import {MyProvider} from '../../../components/context';
 import ActionButtons from './action.buttons';
 import {CanvasMethod, CanvasTowMethod} from './canvas.method';
 import EndpointItem from './endpoint.item';
 import {eventEmit, eventOn} from '../../../lib/event.lib';
+import mockData from '../mock';
 
 class Content extends Component {
   constructor(props) {
     super(props);
+    const {type} = fromatSearch(location.search);
+    this.isAdd = type !== 'edit';
     this.state = {
       isDown: false,
       title: '',
@@ -21,7 +24,8 @@ class Content extends Component {
       repeatText: '',
       mutualType: '1',
       positionTop: 0,
-      positionLeft: 0
+      positionLeft: 0,
+      loading: !this.isAdd
     };
   }
 
@@ -33,7 +37,17 @@ class Content extends Component {
     window.onresize = throttle(this.initParentSize, 50);
     this.canvasCtx = new CanvasMethod(this.canvas);
     this.canvasTowCtx = new CanvasTowMethod(this.canvasTwo);
+    !this.isAdd && this.initData();
     eventOn('clearPreForm', this.handleClearForm);
+  }
+
+  initData = () => {
+    setTimeout(() => {
+      const {drawList, lines} = mockData;
+      this.canvasCtx.initCacheLines(lines);
+      this.props.addStore.setState({drawList});
+      this.setState({loading: false});
+    }, 3000);
   }
 
   componentWillUnmount() {
@@ -55,7 +69,7 @@ class Content extends Component {
 
   handleKeyDown = e => {
     if (e) {
-      if (e.keyCode === 27) this.handleHideDrawer();
+      if (e.keyCode === 27) this.handleEscEvent();
       if (e.keyCode === 8) this.handleDeleteSelect();
       if (e.keyCode === 18) eventEmit('altEvent');
     }
@@ -72,10 +86,23 @@ class Content extends Component {
 
   handleDeleteSelect = () => {
     const {setState, drawList, selectItem} = this.props.addStore;
-    this.canvasCtx.delectCacheItem(selectItem);
+    this.canvasCtx.delectCacheItem(selectItem)
     setState({
       selectItem: null,
       drawList: drawList.filter(({key}) => key !== selectItem)
+    });
+  }
+
+  handleEscEvent = () => {
+    this.handleHideDrawer();
+    this.handleHideSelectItem();
+  }
+
+  handleHideSelectItem = () => {
+    const {selectItem, setState} = this.props.addStore;
+    if (!selectItem) return;
+    setState && setState({
+      selectItem: null
     });
   }
 
@@ -84,7 +111,6 @@ class Content extends Component {
     if (!addVisible) return;
     setState && setState({
       addVisible: false,
-      selectItem: null
     });
     this.handleClearForm();
   }
@@ -106,7 +132,6 @@ class Content extends Component {
     if (y < this.startY && (top + pt - windowH + 100) <= -7950 * scale) return;
     if (x > this.startX && (left + pl) >= -50) return;
     if (x < this.startX && (left + pl - windowW) <= -7950 * scale) return;
-    // console.log(left, left + pl - windowW, -8050 * scale)
     this.setState({
       positionLeft: pl,
       positionTop: pt
@@ -177,18 +202,18 @@ class Content extends Component {
   
   render() {
     const {scale, addVisible, setState, drawList, left, top, lineing} = this.props.addStore;
-    const {positionLeft, positionTop, isDown} = this.state;
+    const {positionLeft, positionTop, isDown, loading} = this.state;
     return (
       <MyProvider value={{curr: this.canvasCtx, showRef: this.canvasTowCtx}}>
         <Container id='draw'>
           <CanvasContent left={left + positionLeft} lineing={lineing} top={top + positionTop} isDown={isDown} id='draw-content' scale={scale}>
             {
-              drawList.map(({left: itemLeft, top: itemTop, ...args}, index) => (
-                <DrawItem item={args} left={itemLeft} top={itemTop} key={args.key}/>
+              !loading && drawList.map(({left: itemLeft, top: itemTop, ...args}, index) => (
+                args.key === 'start' || args.key === 'end' 
+                ? <EndpointItem type={args.key} key={args.key} left={itemLeft} top={itemTop}/>
+                : <DrawItem item={args} left={itemLeft} top={itemTop} key={args.key}/>
               ))
             }
-            <EndpointItem type='start' key='start'/>
-            <EndpointItem type='end' key='end'/>
             <Canvas ref={obj => this.canvas = obj}></Canvas>
           </CanvasContent>
           <Drawer

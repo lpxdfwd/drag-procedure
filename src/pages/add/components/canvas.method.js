@@ -56,8 +56,15 @@ export class CanvasMethod extends CanvasBase {
     // this.darw();
   };
 
+  initCacheLines = cacheLines => {
+    this.cacheLines = cacheLines;
+    this.darw();
+  }
+
   update(lines) {
     if (!lines && !this.cacheLines) return;
+    const {formId, formType} = lines;
+    this.delectLine(formId, formType);
     this.cacheLines.push(lines);
     this.darw();
     this.currLine = null;
@@ -66,6 +73,12 @@ export class CanvasMethod extends CanvasBase {
   delectCacheItem(id) {
     this.cacheLines = this.cacheLines.filter(({toId, formId}) => toId !== id && formId !== id);
     this.darw();
+  }
+
+  delectLine(id, type) {
+    if (id && type) {
+      this.cacheLines = this.cacheLines.filter(({formType, formId}) => formId !== id || formType !== type);
+    }
   }
 
   updatePosition(id, pl, pt) {
@@ -85,7 +98,7 @@ export class CanvasMethod extends CanvasBase {
   darw() {
     this.clear();
     eventEmit('setLineArrow');
-    [].concat(this.cacheLines, this.currLine).filter(Boolean).forEach(item => this.drawItem(item));
+    this.cacheLines.filter(Boolean).forEach(item => this.drawItem(item));
     this.cxt.lineWidth = 2;
     this.cxt.lineCap = "butt";
     this.cxt.strokeStyle = '#666';
@@ -95,6 +108,11 @@ export class CanvasMethod extends CanvasBase {
   updateSize(scale = 1) {
     this.canvas.setAttribute('width', CanvasMethod.baseW * scale + 'px');
     this.canvas.setAttribute('height', CanvasMethod.baseH * scale + 'px');
+  }
+
+  clearAll() {
+    super.clear();
+    this.cacheLines = [];
   }
 }
 

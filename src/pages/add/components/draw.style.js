@@ -45,6 +45,7 @@ export const LeftTitle = styled.div`
     line-height: 24px;
     word-break: break-all;
     position: relative;
+    border-radius: 8px 0 0 0;
 `;
 
 export const LeftContent = styled.div`
@@ -57,6 +58,7 @@ export const LeftContent = styled.div`
     display: flex;
     align-items: center;
     word-break: break-all;
+    border-radius: 0 0 0 8px;
 `;
 
 export const ContentRight = styled.div`
@@ -65,6 +67,12 @@ export const ContentRight = styled.div`
     flex-direction: column;
     border-left: solid 1px #eee;
     background: #fff;
+    &:first-child {
+        border-radius: 0 8px 0 0;
+    }
+    &:last-child {
+        border-radius: 0 0 8px 0;
+    }
 `;
 
 export const RightItem = styled.div`
@@ -77,5 +85,5 @@ export const RightItem = styled.div`
     position: relative;
     & + & {
         border-top: solid 1px #eee;
-    }
+    };
 `;

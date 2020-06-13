@@ -24,7 +24,7 @@ class DrawItem extends Component {
     }
 
     componentWillUnmount() {
-        this.draw.onmousedown = null;
+        this.draw && (this.draw.onmousedown = null);
     }
 
     handleSelectItem = () => {
@@ -61,6 +61,7 @@ class DrawItem extends Component {
         e.stopPropagation();
         this.setState(({top, left, positionLeft, positionTop}) => {
             const t = top + positionTop, l =left + positionLeft;
+            this.props.addStore.updateDrawItem({key: this.props.item.key, left: l, top: t});
             return {
                 isDown: false,
                 top: t,
@@ -85,9 +86,9 @@ class DrawItem extends Component {
                 </ContentLeft>
                 {mutualType === '1' && (
                     <ContentRight>
-                        <RightItem>肯定<StopItem itemKey={key} type='right'/></RightItem>
-                        <RightItem>否定<StopItem itemKey={key} type='right'/></RightItem>
-                        <RightItem>其他<StopItem itemKey={key} type='right'/></RightItem>
+                        <RightItem>肯定<StopItem itemKey={key} itemType='y' type='right'/></RightItem>
+                        <RightItem>否定<StopItem itemKey={key} itemType='n' type='right'/></RightItem>
+                        <RightItem>其他<StopItem itemKey={key} itemType='o' type='right'/></RightItem>
                     </ContentRight>
                 )}
             </Container1>

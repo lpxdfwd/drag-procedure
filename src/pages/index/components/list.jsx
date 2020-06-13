@@ -11,6 +11,7 @@ const List = ({onShowSetting}) => {
   const [current, setCurrent] = useState(1)
   const handleShowEdit = useCallback(id => {
     console.log('修改' + id);
+    window.open('/add?type=edit')
   }, []);
 
   const handleShowManagement = useCallback(id => {

@@ -1,15 +1,22 @@
 import {observable, action} from 'mobx';
 
+const BASE_LEFT = -2500;
+
+const BASE_TOP = -2500;
+
 class IndexStore {
   @observable scale = 1;
 
   @observable addVisible = false
 
-  @observable.deep drawList = [];
+  @observable.deep drawList = [
+    {key: 'start', left: 100 - BASE_LEFT, top: 200 - BASE_TOP},
+    {key: 'end', left: 100 - BASE_LEFT, top: 350 - BASE_TOP},
+  ];
 
-  @observable left = -2500;
+  @observable left = BASE_LEFT;
 
-  @observable top = -2500;
+  @observable top = BASE_TOP;
 
   @observable parentW = 0;
 
@@ -23,8 +30,8 @@ class IndexStore {
     this.scale = 1;
     this.addVisible = false;
     this.drawList = [];
-    this.left = -2500;
-    this.top = -2500;
+    this.left = BASE_LEFT;
+    this.top = BASE_TOP;
     this.parentW = 0;
     this.parentH = 0;
     this.lineing = false;
@@ -73,6 +80,10 @@ class IndexStore {
       left: option.left / this.scale - this.left / this.scale,
       top: option.top / this.scale - this.top / this.scale - 100
     });
+  }
+
+  @action updateDrawItem = ({key, left, top}) => {
+    this.drawList = this.drawList.map(item => item.key === key ? {...item, left, top} : item);
   }
 }
 

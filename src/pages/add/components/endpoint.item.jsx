@@ -10,11 +10,10 @@ import {eventOn} from '../../../lib/event.lib';
 class EndpointItem extends Component {
     constructor(props) {
         super(props);
-        const {type, addStore} = props;
-        const {left, top} = addStore;
+        const {left, top} = props;
         this.state = {
-            left: 100 - left,
-            top: type === 'start' ? 200 - top : 350 - top,
+            left,
+            top,
             positionTop: 0,
             positionLeft: 0,
             isDown: false,
@@ -37,8 +36,8 @@ class EndpointItem extends Component {
     }
 
     componentWillUnmount() {
-        this.draw.onmousedown = null;
-        this.draw.onmouseup = null;
+        this.draw && (this.draw.onmousedown = null);
+        this.draw && (this.draw.onmouseup = null);
         document.onkeyup = null;
     }
 
@@ -89,6 +88,7 @@ class EndpointItem extends Component {
             formL: (this.startX - left) / scale,
             formT: (this.startY - top - 100) / scale,
             formId: this.props.type,
+            formType: this.props.type,
             toL: (x - left) / scale,
             toT: (y - top - 100) / scale,
         })
@@ -117,13 +117,14 @@ class EndpointItem extends Component {
         this.setState({
             positionLeft: pl ,
             positionTop: pt
-        }) 
+        })
     }
 
     handleMouseup = e => {
         e.stopPropagation();
         this.setState(({top, left, positionLeft, positionTop}) => {
             const t = top + positionTop, l =left + positionLeft;
+            this.props.addStore.updateDrawItem({key: this.props.type, left: l, top: t});
             return {
                 isDown: false,
                 top: t,
