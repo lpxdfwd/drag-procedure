@@ -33,10 +33,10 @@ class Content extends Component {
     this.drawContent = document.getElementById('draw-content');
     this.drawContent.onmousedown = this.handleMouseDown;
     document.onkeydown = this.handleKeyDown;
-    this.initParentSize();
-    window.onresize = throttle(this.initParentSize, 50);
     this.canvasCtx = new CanvasMethod(this.canvas);
     this.canvasTowCtx = new CanvasTowMethod(this.canvasTwo);
+    this.initParentSize();
+    window.onresize = throttle(this.initParentSize, 50);
     !this.isAdd && this.initData();
     eventOn('clearPreForm', this.handleClearForm);
   }
@@ -47,7 +47,7 @@ class Content extends Component {
       this.canvasCtx.initCacheLines(lines);
       this.props.addStore.setState({drawList});
       this.setState({loading: false});
-    }, 3000);
+    }, 1000);
   }
 
   componentWillUnmount() {
@@ -57,6 +57,7 @@ class Content extends Component {
   }
 
   initParentSize = () => {
+    this.canvasTowCtx.setSize();
     this.props.addStore.setState({
       windowW: document.body.clientWidth,
       windowH: document.body.clientHeight

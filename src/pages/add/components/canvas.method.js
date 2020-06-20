@@ -120,6 +120,10 @@ export class CanvasMethod extends CanvasBase {
  export class CanvasTowMethod extends CanvasBase {
   constructor(canvas) {
     super(canvas);
+    this.setSize();
+  }
+
+  setSize() {
     this.canvas.setAttribute('width', document.body.clientWidth + 'px');
     this.canvas.setAttribute('height', document.body.clientHeight - 100 + 'px');
   }
