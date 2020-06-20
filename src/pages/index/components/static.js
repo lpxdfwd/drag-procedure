@@ -9,13 +9,14 @@ export const getColumns = options => [
   },
   {
     title: '话题ID',
-    dataIndex: 'key',
-    key: 'key',
+    dataIndex: 'ename',
+    key: 'ename',
   },
   {
     title: '标签',
     dataIndex: 'tag',
     key: 'tag',
+    render: (record) => record ? record.join(', ') : ''
   },
   {
     title: '状态',
@@ -24,8 +25,8 @@ export const getColumns = options => [
   },
   {
     title: '修改时间',
-    key: 'date',
-    dataIndex: 'date',
+    key: 'update_time',
+    dataIndex: 'update_time',
   },
   {
     title: '操作',

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
-import {Drawer, Input, Select} from 'antd';
+import {Drawer, Input, Select, message} from 'antd';
 import styled from 'styled-components';
 import DrawPreItem from './draw.preitem';
 import DrawItem from './draw.item';
@@ -10,13 +10,15 @@ import ActionButtons from './action.buttons';
 import {CanvasMethod, CanvasTowMethod} from './canvas.method';
 import EndpointItem from './endpoint.item';
 import {eventEmit, eventOn} from '../../../lib/event.lib';
+import {queryDetail} from '../../../http/service.api';
 import mockData from '../mock';
 
 class Content extends Component {
   constructor(props) {
     super(props);
-    const {type} = fromatSearch(location.search);
+    const {type, topicId} = fromatSearch(location.search);
     this.isAdd = type !== 'edit';
+    this.topicId = topicId ?? '';
     this.state = {
       isDown: false,
       title: '',
@@ -41,13 +43,19 @@ class Content extends Component {
     eventOn('clearPreForm', this.handleClearForm);
   }
 
-  initData = () => {
-    setTimeout(() => {
-      const {drawList, lines} = mockData;
-      this.canvasCtx.initCacheLines(lines);
-      this.props.addStore.setState({drawList});
-      this.setState({loading: false});
-    }, 1000);
+  initData = async() => {
+    try {
+      const data = await queryDetail({topic_id: this.topicId});
+      this.props.addStore.setState({
+        topicHead: {
+          ename: data.ename,
+          tag: data.tag || [],
+          name: data.name
+        }
+      })
+    } catch (err) {
+      message.error(err.message || '查询话题出错');
+    }
   }
 
   componentWillUnmount() {
@@ -226,7 +234,7 @@ class Content extends Component {
             {this.renderForm()}
             {this.renderPreview()}
           </Drawer>
-          <ActionButtons />
+          <ActionButtons topicId={this.topicId}/>
         </Container>
         <CanvasTwo ref={obj => this.canvasTwo = obj}/>
       </MyProvider>

@@ -58,18 +58,19 @@ const ActionButtons = inject('addStore')(observer(props => {
     if (errMsg) return message.error(errMsg);
     const map = {};
     while(lines.length) {
-      const {formId, formType, toId} = lines.pop();
+      const line = lines.pop();
+      const {formId, formType, toId} = line;
       let drawItem;
       if (formId === 'start') {
         // map[formId] = toId;
         continue;
       }
-      if (map[formId]) {
+      if (map[formId] && map[toId]) {
         drawItem = map[formId];
       } else {
         drawList.forEach((item) => {
           if (item.key === formId) map[formId] = drawItem = formatItem(item, formId);
-          if (item.key === toId && !map[toId]) map[toId] = formatItem(item, toId);
+          if (item.key === toId && toId !== 'end' && !map[toId]) map[toId] = formatItem(item, toId);
         })
       }
       if (formType === 'n') {
@@ -84,9 +85,16 @@ const ActionButtons = inject('addStore')(observer(props => {
       drawList,
       lines: props.ctx.curr.cacheLines,
       ...topicHead,
-      inquireNodes: Object.values(map)
+      inquireNodes: Object.values(map),
+      topic_id: props.topicId
     }
-    const data = await topicSubmit(res);
+    console.log(res);
+    try {
+      await topicSubmit(res);
+      message.success('保存成功');
+    } catch (err) {
+      message.error('请求出错');
+    }
   };
 
   return (

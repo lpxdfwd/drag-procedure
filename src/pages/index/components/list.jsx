@@ -7,11 +7,11 @@ import {dataSource} from './mock.data'
 //分页条数
 const PAGE_SIZE = 10;
 
-const List = ({onShowSetting}) => {
+const List = ({onShowSetting, dataList = []}) => {
   const [current, setCurrent] = useState(1)
   const handleShowEdit = useCallback(id => {
     console.log('修改' + id);
-    window.open('/add?type=edit')
+    window.open(`/add?type=edit&topicId=${id}`)
   }, []);
 
   const handleShowManagement = useCallback(id => {
@@ -26,14 +26,14 @@ const List = ({onShowSetting}) => {
       <Title>机器人对话话题列表</Title>
       <Table 
         pagination={{
-          total: dataSource.length,
+          total: dataList.length,
           current,
           pageSize: PAGE_SIZE,
           onChange: handlePageChange
         }} 
         hideOnSinglePage
         columns={getColumns({onShowEdit: handleShowEdit, onShowManagement: handleShowManagement})} 
-        dataSource={dataSource}
+        dataSource={dataList}
       />
     </Container>
   );

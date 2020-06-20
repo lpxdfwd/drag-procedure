@@ -63,13 +63,14 @@ class DrawPreItem extends Component {
     }
 
     handleMouseup = () => {
-        const {title, firstText, mutualType, repeatText} = this.props;
+        const {title, firstText, mutualType, repeatText, addStore} = this.props;
+        const {drawList} = addStore;
         this.setState(({top, left, positionLeft, positionTop}) => {
             const t = top + positionTop, l =left + positionLeft;
             if (this.isFixed) {
                 this.props.addStore.setState({addVisible: false});
                 eventEmit('clearPreForm');
-                this.props.addStore.addDrawItem({left: l, top: t, title, firstText, mutualType, repeatText, key: +new Date()})
+                this.props.addStore.addDrawItem({left: l, top: t, title, firstText, mutualType, repeatText, key: drawList.length - 1})
             }
             return {
                 isDown: false,
