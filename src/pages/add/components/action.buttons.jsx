@@ -3,7 +3,16 @@ import {inject, observer} from 'mobx-react';
 import { Button, message } from 'antd';
 import styled from 'styled-components';
 import {ContextHOC} from '../../../components/context';
+import {topicSubmit} from '../../../http/service.api';
 
+const formatItem = ({title, repeatText, firstText, mutualType}, id) => ({
+  index: id,
+  title: title, 
+  first_talk: firstText, 
+  redo_talk: repeatText,
+  inactive_mode: mutualType === '1' ? 'confirm' : 'none', 
+  inactive_info: {}
+})
 
 const ActionButtons = inject('addStore')(observer(props => {
   const handleToBig = () => {
@@ -32,31 +41,52 @@ const ActionButtons = inject('addStore')(observer(props => {
     props.ctx.curr.clearAll();
   }
 
-  const handleSumit = () => {
+  const submitCheck = (topicHead, drawList) => {
+    const {name, ename, tag} = topicHead;
+    if (!name) return '请填写话题名称';
+    if (!ename) return '请填写话题ID';
+    if (!tag) return '请填写话题标签';
+    if (drawList.length <= 2) return '请添加节点';
+  }
+
+  const handleSumit = async () => {
     if (!props.ctx.curr || !props.addStore) return;
     const drawList = props.addStore.drawList.slice();
     const lines = props.ctx.curr.cacheLines.slice();
+    const {topicHead} = props.addStore;
+    const errMsg = submitCheck(topicHead, drawList);
+    if (errMsg) return message.error(errMsg);
     const map = {};
     while(lines.length) {
       const {formId, formType, toId} = lines.pop();
       let drawItem;
       if (formId === 'start') {
-        map[formId] = toId;
+        // map[formId] = toId;
         continue;
       }
       if (map[formId]) {
         drawItem = map[formId];
       } else {
-        map[formId] = drawItem = {};
+        drawList.forEach((item) => {
+          if (item.key === formId) map[formId] = drawItem = formatItem(item, formId);
+          if (item.key === toId && !map[toId]) map[toId] = formatItem(item, toId);
+        })
       }
-      drawItem[formType] = toId;
+      if (formType === 'n') {
+        drawItem.inactive_info.deny_jump = toId === 'end' ? -1 : toId;
+      } else if (formType === 'y') {
+        drawItem.inactive_info.admit_jump = toId === 'end' ? -1 : toId;
+      } else {
+        drawItem.inactive_info.other_jump = toId === 'end' ? -1 : toId;
+      }
     }
     const res = {
       drawList,
       lines: props.ctx.curr.cacheLines,
-      res: map
+      ...topicHead,
+      inquireNodes: Object.values(map)
     }
-    // console.log(JSON.stringify(res));
+    const data = await topicSubmit(res);
   };
 
   return (

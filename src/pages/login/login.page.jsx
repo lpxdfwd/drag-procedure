@@ -34,12 +34,22 @@ class LoginPage extends Component {
 
     handleSubmit = async () => {
         const err = this.check();
-        if (err) {
-            return message.error(err);
-        }
+        if (err) return message.error(err);
         const {mobile, password} = this.state;
-        const data = await userLogin({mobile, password});
-        console.log(data);
+        try {
+            const data = await userLogin({mobile, password});
+            cacheLib.sessionId = cacheLib.loginSession;
+            message.success('登陆成功');
+            history.replace('/')
+        } catch({code, message: msg}) {
+            const err = ERROE_LIST.find(item => item.code === code);
+            if (err) {
+                message.error(err.msg);
+            } else {
+                message.error('登录失败');
+            }
+        }
+        
     }
 
     render() {

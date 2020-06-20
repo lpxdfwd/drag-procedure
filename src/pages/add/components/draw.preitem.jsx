@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
+import { message } from 'antd';
 import {Container, ContentLeft, LeftTitle, LeftContent, ContentRight, RightItem} from './draw.style';
 import {throttle} from '../../../utils/normal.utils';
 import {eventEmit} from '../../../lib/event.lib';
@@ -27,6 +28,8 @@ class DrawPreItem extends Component {
     }
 
     handleMouseDown = e => {
+        const err = this.checkValue();
+        if (err) return message.error(err);
         const {layerX, layerY, clientX, clientY} = e;
         const origX = clientX - layerX;
         const origY = clientY - layerY;
@@ -41,6 +44,13 @@ class DrawPreItem extends Component {
         document.onmousemove = throttle(this.handleMouseMove, 32);;
     }
 
+    checkValue = () => {
+        const {title, firstText, repeatText} = this.props;
+        if (!title) return '请填写标题';
+        if (!firstText) return '请填写首轮话术';
+        if (!repeatText) return '请填写重复话术';
+    }
+
     handleMouseMove = e => {
         const {clientX, clientY} = e;
         if (!this.isFixed && (clientX - this.startX) < -250) {
@@ -53,13 +63,13 @@ class DrawPreItem extends Component {
     }
 
     handleMouseup = () => {
-        const {title, firstText, mutualType} = this.props;
+        const {title, firstText, mutualType, repeatText} = this.props;
         this.setState(({top, left, positionLeft, positionTop}) => {
             const t = top + positionTop, l =left + positionLeft;
             if (this.isFixed) {
                 this.props.addStore.setState({addVisible: false});
                 eventEmit('clearPreForm');
-                this.props.addStore.addDrawItem({left: l, top: t, title, firstText, mutualType, key: +new Date()})
+                this.props.addStore.addDrawItem({left: l, top: t, title, firstText, mutualType, repeatText, key: +new Date()})
             }
             return {
                 isDown: false,

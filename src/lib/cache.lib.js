@@ -2,6 +2,8 @@ import {parse, serialize} from 'cookie';
 
 const SESSION_ID = '#session_id';
 
+const LOGIN_KEY = 'wuyan-management-session';
+
 function getCookie(name) {
   const reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
   const values = document.cookie.match(reg);
@@ -30,6 +32,10 @@ class CacheLib {
 
   setCookieMap(name, value) {
     this.#cookieMap[name] = value;
+  }
+
+  get loginSession() {
+    return getCookie(LOGIN_KEY);
   }
 
   getCookie(name) {

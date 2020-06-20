@@ -57,11 +57,7 @@ class Content extends Component {
   }
 
   initParentSize = () => {
-    this.parentW = this.drawContent?.parentNode?.clientWidth ?? 0;
-    this.parentH = this.drawContent?.parentNode?.clientHeight ?? 0;
     this.props.addStore.setState({
-      parentW: this.parentW,
-      parentH: this.parentH,
       windowW: document.body.clientWidth,
       windowH: document.body.clientHeight
     })
@@ -161,14 +157,14 @@ class Content extends Component {
   };
 
   renderPreview = () => {
-    const {title, firstText, mutualType} = this.state;
+    const {title, firstText, mutualType, repeatText} = this.state;
     return (
       <PreviewContent>
         <PreviewTitle>
           <div className='text1'>预览节点</div>
           <div className='text2'>(编辑完成拖入左侧画布)</div>
         </PreviewTitle>
-        <PreviewBox>{this.props.addStore.addVisible && <DrawPreItem title={title} firstText={firstText} mutualType={mutualType}/>}</PreviewBox>
+        <PreviewBox>{this.props.addStore.addVisible && <DrawPreItem title={title} repeatText={repeatText} firstText={firstText} mutualType={mutualType}/>}</PreviewBox>
       </PreviewContent>
     );
   };

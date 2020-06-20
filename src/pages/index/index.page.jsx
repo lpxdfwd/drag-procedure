@@ -20,7 +20,7 @@ class IndexPage extends Component {
   componentDidMount() {
     if (!cacheLib.sessionId) {
       cacheLib.clear();
-      // history.replace(LOGIN_PATH);
+      history.replace(LOGIN_PATH);
     } else {
       //主页面允许匹配非法路由，匹配到重定向
       if (history.location && history.location.pathname !== LIST_PATH) {
@@ -34,7 +34,7 @@ class IndexPage extends Component {
     this.setState({visible: true});
   }
 
-  handleCloseModal = () => this.setState({visible: false})
+  handleCloseModal = () => this.setState({visible: false});
 
   render() {
     const {visible} = this.state;

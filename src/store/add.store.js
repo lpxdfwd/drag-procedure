@@ -18,13 +18,15 @@ class IndexStore {
 
   @observable top = BASE_TOP;
 
-  @observable parentW = 0;
+  @observable windowW = 0;
 
-  @observable parentH = 0;
+  @observable windowH = 0;
 
   @observable lineing = false;
 
   @observable selectItem = null;
+
+  @observable.deep topicHead = {}
 
   @action.bound reset() {
     this.scale = 1;
@@ -32,8 +34,8 @@ class IndexStore {
     this.drawList = [];
     this.left = BASE_LEFT;
     this.top = BASE_TOP;
-    this.parentW = 0;
-    this.parentH = 0;
+    this.windowW = 0;
+    this.windowH = 0;
     this.lineing = false;
     this.selectItem = null;
   }
