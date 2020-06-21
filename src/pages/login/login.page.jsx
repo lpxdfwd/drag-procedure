@@ -58,7 +58,7 @@ class LoginPage extends Component {
                 <Title>锦书话题管理平台</Title>
                 <FormBox>
                     <Input onChange={e => this.handleChangeItem(e.currentTarget.value, 'mobile')} size="large" placeholder="请输入手机号" prefix={<UserOutlined />} />
-                    <Input onChange={e => this.handleChangeItem(e.currentTarget.value, 'password')} size="large" placeholder="请输入密码" prefix={<LockOutlined />} />
+                    <Input type='password' onChange={e => this.handleChangeItem(e.currentTarget.value, 'password')} size="large" placeholder="请输入密码" prefix={<LockOutlined />} />
                     <Button style={{width: '100%'}} size="large" type="primary" onClick={this.handleSubmit}>登录</Button>
                 </FormBox>
             </Container>
