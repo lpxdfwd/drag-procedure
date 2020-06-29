@@ -11,7 +11,6 @@ import {CanvasMethod, CanvasTowMethod} from './canvas.method';
 import EndpointItem from './endpoint.item';
 import {eventEmit, eventOn} from '../../../lib/event.lib';
 import {queryDetail} from '../../../http/service.api';
-import mockData from '../mock';
 
 class Content extends Component {
   constructor(props) {
@@ -266,36 +265,6 @@ const CanvasContent = styled.div`
   transform: ${props => `scale(${props.scale},${props.scale})`};
   transform-origin: 0 0;
   cursor: ${props => props.lineing ? 'crosshair' : (props.isDown ? 'grabbing' : 'grab')};
-`;
-
-const Text = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -250px;
-  margin-left: -250px;
-  width: 500px;
-  height: 500px;
-  background: yellow;
-  text-align: center;
-  line-height: 500px;
-  color: #fff;
-  font-size: 30px;
-`;
-
-const Text1 = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -1250px;
-  margin-left: -1250px;
-  width: 600px;
-  height: 600px;
-  background: yellow;
-  text-align: center;
-  line-height: 500px;
-  color: #fff;
-  font-size: 30px;
 `;
 
 const FormContent = styled.div`
