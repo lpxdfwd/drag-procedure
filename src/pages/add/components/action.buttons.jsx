@@ -65,12 +65,11 @@ const ActionButtons = inject('addStore')(observer(props => {
         // map[formId] = toId;
         continue;
       }
-      if (map[formId] && map[toId]) {
+      if (map[formId]) {
         drawItem = map[formId];
       } else {
         drawList.forEach((item) => {
           if (item.key === formId) map[formId] = drawItem = formatItem(item, formId);
-          if (item.key === toId && toId !== 'end' && !map[toId]) map[toId] = formatItem(item, toId);
         })
       }
       if (formType === 'n') {

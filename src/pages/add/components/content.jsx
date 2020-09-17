@@ -11,6 +11,7 @@ import {CanvasMethod, CanvasTowMethod} from './canvas.method';
 import EndpointItem from './endpoint.item';
 import {eventEmit, eventOn} from '../../../lib/event.lib';
 import {queryDetail} from '../../../http/service.api';
+import mockData from '../mock';
 
 class Content extends Component {
   constructor(props) {
@@ -51,7 +52,13 @@ class Content extends Component {
           tag: data.tag || [],
           name: data.name
         }
-      })
+      });
+      //mock数据
+      const {drawList, lines} = mockData;
+      this.canvasCtx.initCacheLines(lines);
+      this.props.addStore.setState({drawList});
+      setTimeout(() => eventEmit('setLineArrow'), 1000);
+      this.setState({loading: false});
     } catch (err) {
       message.error(err.message || '查询话题出错');
     }
